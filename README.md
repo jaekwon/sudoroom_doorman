@@ -1,5 +1,7 @@
 # Sudoroom Access Control
 
+We want to know whether SudoRoom has people in it or not.
+
 ### doorman.py
 
 This script will listen to audio signals from an audio jack, and change state depending on whether it hears a loud squarewave.
