@@ -27,3 +27,11 @@ by rotating a gear via a stepper motor, controlled by something like an L293DNE 
 * Add a mechanism for detecting end-of-rotation
 * Upload electronics schematics and photos
 * Move secrets into another file
+* Move this project to a SudoRoom account
+
+### Contributors
+
+* Max KleinBottle
+* Jordan
+* Andrew
+* Jae
