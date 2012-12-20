@@ -25,7 +25,9 @@ from tornado.options import define, options
 welcomeMessage = "there's more than one way to skin a cat"
 goodbyeMessage = "sleep is good"
 denyTemplate = 'deny.html'
-secrets = ('REPLACEME',)
+secrets = []
+for line in file('secrets'):
+    secrets.append(line.strip())
 
 import serial
 s = serial.Serial(port='/dev/ttyAMA0', baudrate=9600)
