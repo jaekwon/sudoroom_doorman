@@ -47,11 +47,9 @@ def closeIn(path):
     return False
 
 def doorOpen():
-    print 'door would open'
     s.write('o')
 
 def doorClose():
-    print 'door would close'
     s.write('c')
 
 define("port", default=7836, help="run on the given port", type=int)
