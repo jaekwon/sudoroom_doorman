@@ -55,6 +55,7 @@ def doorClose():
     s.write('c')
 
 define("port", default=7836, help="run on the given port", type=int)
+define("sslport", default=7837, help="run SSL on the given port", type=int)
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -68,10 +69,16 @@ class MainHandler(tornado.web.RequestHandler):
                     self.write(welcomeMessage)
             else:
                 self.render(denyTemplate)
-                
+
+class RedirectHandler(tornado.web.RequestHandler):
+    def get(self, path):
+        self.redirect('https://'+self.request.host.split(':')[0]+':'+str(options.sslport), permanent=True)
 
 def main():
     tornado.options.parse_command_line()
+    redir_app = tornado.web.Application([(r"/(.*)", RedirectHandler)])
+    redir_server = tornado.httpserver.HTTPServer(redir_app)
+    redir_server.listen(options.port)
     application = tornado.web.Application([
         (r"/images/(.*)", tornado.web.StaticFileHandler, {"path":"./images"}),
         (r"/(.*)", MainHandler),
@@ -82,7 +89,7 @@ def main():
         'keyfile': 'keys/doorman.key',
         'ca_certs': 'keys/doorman.pem',
     })
-    http_server.listen(options.port)
+    http_server.listen(options.sslport)
     tornado.ioloop.IOLoop.instance().start()
 
 
