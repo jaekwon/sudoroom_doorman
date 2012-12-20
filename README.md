@@ -32,6 +32,5 @@ by rotating a gear via a stepper motor, controlled by something like an L293DNE 
 ### Contributors
 
 * Max KleinBottle
-* Jordan
 * Andrew
 * Jae
