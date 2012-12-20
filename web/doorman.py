@@ -80,6 +80,7 @@ def main():
     http_server = tornado.httpserver.HTTPServer(application, ssl_options={
         'certfile': 'keys/doorman.pem',
         'keyfile': 'keys/doorman.key',
+        'ca_certs': 'keys/doorman.pem',
     })
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
