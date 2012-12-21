@@ -54,6 +54,7 @@ def doorOpen():
 def doorClose():
     s.write('c')
 
+# use iptables to forward these from privileged ports (80, 443)
 define("port", default=7836, help="run on the given port", type=int)
 define("sslport", default=7837, help="run SSL on the given port", type=int)
 
@@ -72,7 +73,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 class RedirectHandler(tornado.web.RequestHandler):
     def get(self, path):
-        self.redirect('https://'+self.request.host.split(':')[0]+':'+str(options.sslport), permanent=True)
+        self.redirect('https://'+self.request.host.split(':')[0], permanent=True)
 
 def main():
     tornado.options.parse_command_line()
@@ -84,6 +85,7 @@ def main():
         (r"/(.*)", MainHandler),
 
     ])
+    # generate these with openssl
     http_server = tornado.httpserver.HTTPServer(application, ssl_options={
         'certfile': 'keys/doorman.pem',
         'keyfile': 'keys/doorman.key',
