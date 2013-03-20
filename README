@@ -1,0 +1,25 @@
+
+These are the scripts for the sudoroom hackerspace's raspberry pi doorputer.
+
+The doorputer has one GPIO pin hooked up to a relay that unlocks the door
+when the GPIO pin is set to logic high.
+
+The doorputer has a usb wifi adapter which is running as master (access point).
+
+The DNS daemon and web daemon together make a captive web page appear when
+e.g. a smartphone connects to the access point.
+
+The DNS daemon resolves all DNS requests to the doorputer's IP.
+
+The web daemon is a simple web app that will unlock the door when the
+right password is entered.
+
+There is no encryption. Everything is plaintext. Replay attacks are easy.
+
+The rfid daemon waits for input from the rfid reader (which acts as a serial
+device, outputting the ID number of RFID tags within proximity of the reader)
+and if the ID is in a hardcoded list of accepted IDs, then it runs the
+opendoor.py script, which unlocks the door for a few seconds.
+
+The .py scripts do the work.
+The non-.py scripts are just bash scripts that go in /etc/init.d.
