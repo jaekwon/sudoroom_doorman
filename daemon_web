@@ -1,0 +1,13 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          daemon_web
+# Required-Start:    $remote_fs $all
+# Required-Stop: 
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Simple web server
+# Description:       This script starts the web server
+### END INIT INFO
+
+/usr/bin/python2.7 /root/sudoor/daemon_web.py
+
