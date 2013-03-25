@@ -1,0 +1,13 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          rfid_daemon
+# Required-Start:    $remote_fs $all
+# Required-Stop: 
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: rfid door access 
+# Description:       RFID door access
+### END INIT INFO
+
+/usr/bin/python2.7 /root/sudoor/rfid_daemon.py
+
