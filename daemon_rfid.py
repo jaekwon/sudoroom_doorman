@@ -23,19 +23,19 @@ dup2(si.fileno(), stdin.fileno())
 dup2(so.fileno(), stdout.fileno())
 dup2(se.fileno(), stderr.fileno())
 
+#open codes file
+try:
+	f = open('rfid_codes.txt','r')
+	codes = f.readlines()
+	f.close()
+
+except:
+	print("Could Find Code File")
+	exit() 
 
 ser = serial.Serial('/dev/ttyUSB0', 2400, timeout=1)
 
 lasttime = 0
-
-codes = [
-  "4003510BB",
-  "4003509CC",
-  "700B94870",
-  "10031D0E4",
-  "4003522F4",
-  "40034BA5E"
-]
 
 while(True):
 	string = ser.read(12)
