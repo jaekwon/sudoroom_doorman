@@ -4,7 +4,7 @@ import sys
 import serial
 import subprocess
 import time
-from os import fork, setsid, umask, dup2
+from os import fork, setsid, umask, dup2, path
 from sys import stdin, stdout, stderr
 from optparse import OptionParser
 
@@ -29,12 +29,17 @@ if not options.foreground:
 	dup2(so.fileno(), stdout.fileno())
 	dup2(se.fileno(), stderr.fileno())
 
+#our list of codes
+codes = []
+
+script_path = path.dirname(__file__)
+
 #open codes file
 try:
-	f = open('rfid_codes.txt','r')
-	codes = f.readlines()
+	f = open(script_path+'/rfid_codes.txt','r')
+	for line in f:
+		codes.append(line.split("#")[0].strip())
 	f.close()
-
 except:
 	print("Could Find Code File")
 	exit() 
@@ -58,6 +63,6 @@ while(True):
 			try:
 				codes.index(string)
 				print("  access granted!")
-				subprocess.call("/root/sudoor/opendoor.py")
+				subprocess.call(script_path+"/opendoor.py")
 			except:
 				print("  access denied :(")
