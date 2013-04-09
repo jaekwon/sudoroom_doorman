@@ -32,7 +32,7 @@ if not options.foreground:
 #our list of codes
 codes = []
 
-script_path = path.dirname(__file__)
+script_path = path.abspath(path.dirname(__file__))
 
 #open codes file
 try:
