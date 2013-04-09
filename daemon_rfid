@@ -9,5 +9,16 @@
 # Description:       RFID door access
 ### END INIT INFO
 
-/usr/bin/python2.7 /root/sudoor/rfid_daemon.py
+case "$1" in
+  start)
+    /usr/bin/python2.7 /root/sudoor/sudodoor/rfid_daemon.py
+    ;;
+  stop)
+    kill `ps aux | grep rfid_daemon.py | head -n 1 | tr -s " " | cut -d" " -f2`
+    ;;
+  restart)
+    /usr/bin/python2.7 /root/sudoor/sudodoor/rfid_daemon.py
+    kill `ps aux | grep rfid_daemon.py | head -n 1 | tr -s " " | cut -d" " -f2`
+    ;;
+esac
 
