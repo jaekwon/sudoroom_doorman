@@ -22,7 +22,7 @@ import tornado.web
 from tornado.options import define, options
 
 #CONSTANTS
-welcomeMessage = "there's more than one way to skin a cat"
+welcomeMessage = "liberation"
 goodbyeMessage = "sleep is good"
 denyTemplate = 'deny.html'
 secrets = []
