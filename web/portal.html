@@ -1,26 +1,21 @@
 <html>
   <head>
     <title>SudoRoom Door</title>
+	 <style type="text/css">
+		input {
+		width:500px;
+		height:100px;
+		font-size:30px;
+		}
+	 </style>
   </head>
   <body>
     This page is for opening the doors to <a href="https://sudoroom.org/">SudoRoom</a>!<br/><br />
 	 <form method="post" action="/dooeet">
-		<input type="hidden" name="door" value="outside" />
-		<input type="text" name="secret" style="width:200px;" value="" />
-		<input type="submit" value="OPEN OUTSIDE DOOR" />
-	 </form>
-		<br /><br />
-	 <form method="post" action="/dooeet">
-		<input type="hidden" name="door" value="inside" />
-		<input type="text" name="secret"  style="width:200px;" value="" />
-		<input type="submit" value="OPEN INSIDE  DOOR" />
-	 </form>
-		<br /><br />
-	 <form method="post" action="/dooeet">
-		<input type="hidden" name="door" value="inside" />
-		<input type="hidden" name="action" value="close" />
-		<input type="text" name="secret"  style="width:200px;" value="" />
-		<input type="submit" value="CLOSE INSIDE  DOOR" />
+		<input type="text" name="secret" value="" />
+		<input type="submit" name="button" value="OPEN OUTSIDE DOOR" />
+		<input type="submit" name="button" value="OPEN INSIDE DOOR" />
+		<input type="submit" name="button" value="CLOSE INSIDE DOOR" />
 	 </form>
   </body>
 </html>

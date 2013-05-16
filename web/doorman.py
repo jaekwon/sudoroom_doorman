@@ -78,9 +78,18 @@ class PortalHandler(tornado.web.RequestHandler):
             self.render("portal.html")
 class ActionHandler(tornado.web.RequestHandler):
     def post(self):
-        door = self.get_argument('door','')
+        door = 'inside'
+        action = 'open'
         secret = self.get_argument('secret','')
-        action = self.get_argument('action','open')
+        button = self.get_argument('button','default')
+        if button == 'OPEN OUTSIDE DOOR':
+            door = 'outside'
+        elif button == 'OPEN INSIDE DOOR':
+            pass
+        elif button == 'CLOSE INSIDE DOOR':
+            action = 'close'
+        else:
+            self.render(denyTemplate)
         if action == 'open' and not secretIn(secret):
             self.render(denyTemplate)
             return
