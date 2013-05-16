@@ -109,7 +109,7 @@ def main():
     # create the https primary server
     application = tornado.web.Application([
         (r"/images/(.*)", tornado.web.StaticFileHandler, {"path":"./images"}),
-        (r"/portal/(.*)", PortalHandler),
+        (r"/portal(.*)", PortalHandler),
         (r"/dooeet", ActionHandler),
         (r"/(.*)", MainHandler),
     ])
