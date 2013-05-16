@@ -48,10 +48,10 @@ def closeIn(path):
             return True
     return False
 
-def doorOpen():
+def innerDoorOpen():
     s.write('o')
 
-def doorClose():
+def innderDoorClose():
     s.write('c')
 
 # use iptables to forward these from privileged ports (80, 443)
@@ -63,10 +63,10 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self, path):
             if secretIn(path):
                 if closeIn(path):
-                    doorClose()
+                    innerDoorClose()
                     self.write(goodbyeMessage)
                 else:
-                    doorOpen()
+                    innerDoorOpen()
                     self.write(welcomeMessage)
             else:
                 self.render(denyTemplate)
