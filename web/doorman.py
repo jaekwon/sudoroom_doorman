@@ -4,6 +4,8 @@
 # - the primary one on https
 # - http redirecting to the primary one
 
+import urllib2
+
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -45,7 +47,8 @@ def innerDoorClose():
     s.write('c')
 
 def outerDoorOpen():
-    pass
+    if urllib2.urlopen('http://192.168.1.42/simple',None,2).read().strip() != 'buzzed':
+        print "OUTSIDE FAILED"
 
 # use iptables to forward these from privileged ports (80, 443)
 define("port", default=7836, help="run on the given port", type=int)
