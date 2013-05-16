@@ -44,6 +44,9 @@ def innerDoorOpen():
 def innderDoorClose():
     s.write('c')
 
+def outerDoorOpen():
+    pass
+
 # use iptables to forward these from privileged ports (80, 443)
 define("port", default=7836, help="run on the given port", type=int)
 define("sslport", default=7837, help="run SSL on the given port", type=int)
@@ -70,6 +73,25 @@ class MainHandler(tornado.web.RequestHandler):
 class PortalHandler(tornado.web.RequestHandler):
     def get(self, path):
             self.render("portal.html")
+class ActionHandler(tornado.web.RequestHandler):
+    def post(self):
+        door = self.get_argument('door','')
+        secret = self.get_argument('secret','')
+        action = self.get_argument('action','open')
+        if action == 'open' and not secretIn(secret):
+            self.render(denyTemplate)
+            return
+        if door == 'inside':
+            if action == 'close':
+                innerDoorClose()
+                self.write(goodbyeMessage)
+            else:
+                innerDoorOpen()
+                self.write(welcomeMessage)
+        elif door == 'outside':
+            outerDoorOpen()
+        else:
+            self.render(denyTemplate)
 
 def main():
     tornado.options.parse_command_line()
@@ -85,6 +107,7 @@ def main():
     application = tornado.web.Application([
         (r"/images/(.*)", tornado.web.StaticFileHandler, {"path":"./images"}),
         (r"/portal/(.*)", PortalHandler),
+        (r"/dooeet", ActionHandler),
         (r"/(.*)", MainHandler),
     ])
     http_server = tornado.httpserver.HTTPServer(application, ssl_options={

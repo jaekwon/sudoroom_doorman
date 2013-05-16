@@ -1,8 +1,26 @@
 <html>
-   <head>
-      <title>SudoRoom Door</title>
-   </head>
-   <body>
-     <p>sup</p>
-   </body>
- </html>
+  <head>
+    <title>SudoRoom Door</title>
+  </head>
+  <body>
+    This page is for opening the doors to <a href="https://sudoroom.org/">SudoRoom</a>!<br/><br />
+	 <form method="post" action="/dooeet">
+		<input type="hidden" name="door" value="outside" />
+		<input type="text" name="secret" style="width:200px;" value="" />
+		<input type="submit" value="OPEN OUTSIDE DOOR" />
+	 </form>
+		<br /><br />
+	 <form method="post" action="/dooeet">
+		<input type="hidden" name="door" value="inside" />
+		<input type="text" name="secret"  style="width:200px;" value="" />
+		<input type="submit" value="OPEN INSIDE  DOOR" />
+	 </form>
+		<br /><br />
+	 <form method="post" action="/dooeet">
+		<input type="hidden" name="door" value="inside" />
+		<input type="hidden" name="action" value="close" />
+		<input type="text" name="secret"  style="width:200px;" value="" />
+		<input type="submit" value="CLOSE INSIDE  DOOR" />
+	 </form>
+  </body>
+</html>
