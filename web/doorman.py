@@ -66,6 +66,11 @@ class MainHandler(tornado.web.RequestHandler):
             else:
                 self.render(denyTemplate)
 
+# restful experiment
+class PortalHandler(tornado.web.RequestHandler):
+    def get(self, path):
+            self.render("portal.html")
+
 def main():
     tornado.options.parse_command_line()
 
@@ -79,6 +84,7 @@ def main():
     # create the https primary server
     application = tornado.web.Application([
         (r"/images/(.*)", tornado.web.StaticFileHandler, {"path":"./images"}),
+        (r"/portal/(.*)", PortalHandler),
         (r"/(.*)", MainHandler),
     ])
     http_server = tornado.httpserver.HTTPServer(application, ssl_options={
