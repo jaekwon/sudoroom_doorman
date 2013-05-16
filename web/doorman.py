@@ -41,7 +41,7 @@ def closeIn(path):
 def innerDoorOpen():
     s.write('o')
 
-def innderDoorClose():
+def innerDoorClose():
     s.write('c')
 
 def outerDoorOpen():
