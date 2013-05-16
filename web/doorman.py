@@ -14,6 +14,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+# this creates two servers:
+# - the primary one on https
+# - http redirecting to the primary one
+
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -58,7 +62,12 @@ def innderDoorClose():
 define("port", default=7836, help="run on the given port", type=int)
 define("sslport", default=7837, help="run SSL on the given port", type=int)
 
+# http redirect server
+class RedirectHandler(tornado.web.RequestHandler):
+    def get(self, path):
+        self.redirect('https://'+self.request.host.split(':')[0], permanent=True)
 
+# https primary server
 class MainHandler(tornado.web.RequestHandler):
     def get(self, path):
             if secretIn(path):
@@ -71,27 +80,30 @@ class MainHandler(tornado.web.RequestHandler):
             else:
                 self.render(denyTemplate)
 
-class RedirectHandler(tornado.web.RequestHandler):
-    def get(self, path):
-        self.redirect('https://'+self.request.host.split(':')[0], permanent=True)
-
 def main():
     tornado.options.parse_command_line()
+
+
+    # create the http redirect server
     redir_app = tornado.web.Application([(r"/(.*)", RedirectHandler)])
     redir_server = tornado.httpserver.HTTPServer(redir_app)
     redir_server.listen(options.port)
+
+
+    # create the https primary server
     application = tornado.web.Application([
         (r"/images/(.*)", tornado.web.StaticFileHandler, {"path":"./images"}),
         (r"/(.*)", MainHandler),
-
     ])
-    # generate these with openssl
     http_server = tornado.httpserver.HTTPServer(application, ssl_options={
         'certfile': 'keys/doorman.pem',
         'keyfile': 'keys/doorman.key',
         'ca_certs': 'keys/doorman.pem',
     })
     http_server.listen(options.sslport)
+
+
+    # begin serving
     tornado.ioloop.IOLoop.instance().start()
 
 
