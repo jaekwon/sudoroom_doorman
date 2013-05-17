@@ -53,7 +53,7 @@ class PortalHandler(tornado.web.RequestHandler):
         messages=[]
         message_code = self.get_argument('message','')
         if message_code == 'fail':
-            messages=['<span style="font-weight:bold;font-size:30px;">WRONG PASSWORD</span><div><img src="/images/newman.gif"/></div>']
+            messages=['<span style="font-weight:bold;font-size:30px;">WRONG PASSWORD</span><div><img src="/static/newman.gif"/></div>']
         if message_code == 'success':
             messages=['<span style="font-weight:bold;font-size:30px;">SUCCESS!</span>']
         self.render("portal.html",messages=messages)
@@ -99,7 +99,7 @@ def main():
 
     # create the https primary server
     application = tornado.web.Application([
-        (r"/images/(.*)", tornado.web.StaticFileHandler, {"path":"./images"}),
+        (r"/static/(.*)", tornado.web.StaticFileHandler, {"path":"./static"}),
         (r"/dooeet", ActionHandler),
         (r"/(.*)", PortalHandler),
     ])
