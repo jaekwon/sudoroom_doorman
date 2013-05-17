@@ -14,6 +14,10 @@
   <body>
     This page is for opening the doors to <a href="https://sudoroom.org/">SudoRoom</a>!
 	 <br /><br />
+	 {% autoescape None %}
+	 {% for message in messages %}
+	 {{ message }}<br /><br />
+	 {% end %}
 	 Please enter a password, then press a button:
 	 <br />
 	 <form method="post" action="/dooeet">

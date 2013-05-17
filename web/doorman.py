@@ -54,7 +54,7 @@ class RedirectHandler(tornado.web.RequestHandler):
 # https primary server
 class PortalHandler(tornado.web.RequestHandler):
     def get(self, path):
-            self.render("portal.html")
+        self.render("portal.html",messages=['<span style="color:red">SUP</span>'])
 class ActionHandler(tornado.web.RequestHandler):
     def post(self):
         door = 'inside'
