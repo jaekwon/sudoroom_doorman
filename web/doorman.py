@@ -32,14 +32,6 @@ def secretIn(path):
             return True
     return False #if you got to here then you weren't in secrets
 
-def closeIn(path):
-    words = path.split('_')
-    for word in words:
-        word = word.lower()
-        if word == 'close':
-            return True
-    return False
-
 def innerDoorOpen():
     s.write('o')
 
@@ -60,19 +52,6 @@ class RedirectHandler(tornado.web.RequestHandler):
         self.redirect('https://'+self.request.host.split(':')[0], permanent=True)
 
 # https primary server
-class MainHandler(tornado.web.RequestHandler):
-    def get(self, path):
-            if secretIn(path):
-                if closeIn(path):
-                    innerDoorClose()
-                    self.write(goodbyeMessage)
-                else:
-                    innerDoorOpen()
-                    self.write(welcomeMessage)
-            else:
-                self.render(denyTemplate)
-
-# restful experiment
 class PortalHandler(tornado.web.RequestHandler):
     def get(self, path):
             self.render("portal.html")
@@ -118,9 +97,8 @@ def main():
     # create the https primary server
     application = tornado.web.Application([
         (r"/images/(.*)", tornado.web.StaticFileHandler, {"path":"./images"}),
-        (r"/portal(.*)", PortalHandler),
         (r"/dooeet", ActionHandler),
-        (r"/(.*)", MainHandler),
+        (r"/(.*)", PortalHandler),
     ])
     http_server = tornado.httpserver.HTTPServer(application, ssl_options={
         'certfile': 'keys/door.sudoroom.org.crt',
