@@ -123,12 +123,10 @@ def main():
         (r"/(.*)", MainHandler),
     ])
     http_server = tornado.httpserver.HTTPServer(application, ssl_options={
-        'certfile': 'keys/doorman.pem',
-        'keyfile': 'keys/doorman.key',
-        'ca_certs': 'keys/doorman.pem',
+        'certfile': 'keys/door.sudoroom.org.crt',
+        'keyfile': 'keys/door.sudoroom.org.key',
     })
     http_server.listen(options.sslport)
-
 
     # begin serving
     tornado.ioloop.IOLoop.instance().start()
