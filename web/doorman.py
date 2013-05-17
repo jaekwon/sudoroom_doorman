@@ -13,10 +13,6 @@ import tornado.web
 
 from tornado.options import define, options
 
-#CONSTANTS
-welcomeMessage = "liberation"
-goodbyeMessage = "sleep is good"
-denyTemplate = 'deny.html'
 secrets = []
 for line in file('secrets'):
     secrets.append(line.strip())
@@ -54,7 +50,13 @@ class RedirectHandler(tornado.web.RequestHandler):
 # https primary server
 class PortalHandler(tornado.web.RequestHandler):
     def get(self, path):
-        self.render("portal.html",messages=['<span style="color:red">SUP</span>'])
+        messages=[]
+        message_code = self.get_argument('message','')
+        if message_code == 'fail':
+            messages=['<span style="font-weight:bold;font-size:30px;">WRONG PASSWORD</span><div><img src="/images/newman.gif"/></div>']
+        if message_code == 'success':
+            messages=['<span style="font-weight:bold;font-size:30px;">SUCCESS!</span>']
+        self.render("portal.html",messages=messages)
 class ActionHandler(tornado.web.RequestHandler):
     def post(self):
         door = 'inside'
@@ -68,21 +70,22 @@ class ActionHandler(tornado.web.RequestHandler):
         elif button == 'CLOSE INSIDE DOOR':
             action = 'close'
         else:
-            self.render(denyTemplate)
+            self.redirect('/?message=fail', permanent=False)
         if action == 'open' and not secretIn(secret):
-            self.render(denyTemplate)
+            self.redirect('/?message=fail', permanent=False)
             return
         if door == 'inside':
             if action == 'close':
                 innerDoorClose()
-                self.write(goodbyeMessage)
+                self.redirect('/?message=success', permanent=False)
             else:
                 innerDoorOpen()
-                self.write(welcomeMessage)
+                self.redirect('/?message=success', permanent=False)
         elif door == 'outside':
             outerDoorOpen()
+            self.redirect('/?message=success', permanent=False)
         else:
-            self.render(denyTemplate)
+            self.redirect('/?message=fail', permanent=False)
 
 def main():
     tornado.options.parse_command_line()
