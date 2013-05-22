@@ -106,6 +106,7 @@ def main():
     http_server = tornado.httpserver.HTTPServer(application, ssl_options={
         'certfile': 'keys/door.sudoroom.org.crt',
         'keyfile': 'keys/door.sudoroom.org.key',
+        'ca_certs': 'keys/door.sudoroom.org.chain.crt',
     })
     http_server.listen(options.sslport)
 
