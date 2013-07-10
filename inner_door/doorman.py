@@ -11,6 +11,9 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 
+import datetime
+import RPi.GPIO as GPIO
+
 from tornado.options import define, options
 
 secrets = []
@@ -19,6 +22,7 @@ for line in file('secrets'):
 
 import serial
 s = serial.Serial(port='/dev/ttyAMA0', baudrate=9600)
+
 
 def secretIn(path):
     words = path.split('_')
@@ -31,8 +35,23 @@ def secretIn(path):
 def innerDoorOpen():
     s.write('o')
 
+
 def innerDoorClose():
     s.write('c')
+
+def unlock_elevator():
+    GPIO.output(22, GPIO.LOW)
+
+def unlock_elevator_for_seconds(secs):
+    unlock_elevator()
+
+    # re-lock elevator in seconds
+    tornado.ioloop.IOLoop.instance().add_timeout(datetime.timedelta(seconds=secs), lock_elevator)
+
+
+
+def lock_elevator():
+    GPIO.output(22, GPIO.HIGH)
 
 def outerDoorOpen():
     if urllib2.urlopen('http://192.168.1.42/simple',None,2).read().strip() != 'buzzed':
@@ -69,6 +88,8 @@ class ActionHandler(tornado.web.RequestHandler):
             pass
         elif button == 'CLOSE INSIDE DOOR':
             action = 'close'
+        elif button == 'UNLOCK ELEVATOR':
+            door = 'elevator'            
         else:
             self.redirect('/?message=fail', permanent=False)
         if action == 'open' and not secretIn(secret):
@@ -83,13 +104,23 @@ class ActionHandler(tornado.web.RequestHandler):
                 self.redirect('/?message=success', permanent=False)
         elif door == 'outside':
             outerDoorOpen()
+            # unlock elevator for 90 seconds
+            unlock_elevator_for_seconds(90)
             self.redirect('/?message=success', permanent=False)
+        elif door == 'elevator':
+            self.redirect('/?message=success', permanent=False)
+            unlock_elevator_for_seconds(20)
+
         else:
             self.redirect('/?message=fail', permanent=False)
 
 def main():
     tornado.options.parse_command_line()
 
+    # set the GPIO pin for elevator control as output
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(22, GPIO.OUT)
+    lock_elevator()
 
     # create the http redirect server
     redir_app = tornado.web.Application([(r"/(.*)", RedirectHandler)])
