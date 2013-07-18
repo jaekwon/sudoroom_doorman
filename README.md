@@ -1,23 +1,16 @@
-# SudoRoom Doorman (Access Control)
+[Sudo Room](https://sudoroom.org/) is a hackerspace in downtown Oakland. We try to let people open our doors automatically without physical keys, and this is part of how we do it.
 
-The Doorman is a 3d printable bot that handles access control.
-It uses Ti's MSP-EXP430G2 development board to listen on the UART serial pins for commands from a web server to unlock or lock the door,
-by rotating a gear via a stepper motor, controlled by something like an L293DNE dual H-bridge.
+### SETUP
 
-1. User accesses a secret web URL
-2. Server uses PySerial to send a command to the MSP430
-3. MSP430 detects command on the UART Rx pin and runs the stepper motor (via a dual H-bridge)
+We have two doors - the first door enters our building from the outside, and is controlled by the software under `outer_door/`
 
-### Objectives
+The second door enters Sudo Room from the hallway. This has several components:
 
-* Status updates of whether SudoRoom is open or not
-* Unlock the inner door via some mechanism
-
-### Project Structure
-
-* msp430/ code for the msp430 on an MSP-EXP430G2 development board. See msp430/doorman/doorman.c for details.
-* web/ code for access control webserver running on Tornado (on a raspberry pi)
-* models/ model files for the physical device
+- A Raspbery Pi running a tornado web server - it has a password-protected user interface and its code is in `inner_door/`
+- The server sends commands over RasPi's UART Rx serial pin using PySerial
+- The pin is wired to a Texas Instruments MSP-EXP430G2 development board, running code you can find under `msp430/` (especially at `msp430/doorman/doorman.c`)
+- The MSP430 runs a stepper motor, controlled by something like an L293DNE dual H-bridge
+- The motor rotates 3D-printed gears in a 3D-printed house, which turn a physical key in the lock. The models for these are in `models/`
 
 ### TODO
 
@@ -26,12 +19,3 @@ by rotating a gear via a stepper motor, controlled by something like an L293DNE 
 * Change gear ratio to make unlocking work better (stronger, as the key or lock-knob probably requires quite a bit of force to rotate)
 * Add a mechanism for detecting end-of-rotation
 * Upload electronics schematics and photos
-* Move secrets into another file
-* Move this project to a SudoRoom account
-
-### Contributors
-
-* Max KleinBottle
-* Jordan
-* Andrew
-* Jae

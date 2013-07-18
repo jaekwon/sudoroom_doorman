@@ -1,0 +1,24 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          rfid_daemon
+# Required-Start:    $remote_fs $all
+# Required-Stop: 
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: rfid door access 
+# Description:       RFID door access
+### END INIT INFO
+
+case "$1" in
+  start)
+    /usr/bin/python2.7 /root/sudoor/sudodoor/rfid_daemon.py
+    ;;
+  stop)
+    kill `ps aux | grep rfid_daemon.py | head -n 1 | tr -s " " | cut -d" " -f2`
+    ;;
+  restart)
+    /usr/bin/python2.7 /root/sudoor/sudodoor/rfid_daemon.py
+    kill `ps aux | grep rfid_daemon.py | head -n 1 | tr -s " " | cut -d" " -f2`
+    ;;
+esac
+
