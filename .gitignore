@@ -1,2 +1,4 @@
 *.swp
 inner_door/secrets
+inner_door/doorman.log
+*~
