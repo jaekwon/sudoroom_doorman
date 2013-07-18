@@ -82,13 +82,13 @@ class ActionHandler(tornado.web.RequestHandler):
         action = 'open'
         secret = self.get_argument('secret','')
         button = self.get_argument('button','default')
-        if button == 'OPEN OUTSIDE DOOR':
+        if button == 'open_out':
             door = 'outside'
-        elif button == 'OPEN INSIDE DOOR':
+        elif button == 'open_in':
             pass
-        elif button == 'CLOSE INSIDE DOOR':
+        elif button == 'close_in':
             action = 'close'
-        elif button == 'UNLOCK ELEVATOR':
+        elif button == 'open_el':
             door = 'elevator'            
         elif button == 'UNLOCK ELEVATOR LONG':
             door = 'elevator_long'
