@@ -12,13 +12,14 @@ import tornado.options
 import tornado.web
 
 import datetime
+import re
 import RPi.GPIO as GPIO
 
 from tornado.options import define, options
 
 secrets = []
 for line in file('secrets'):
-    secrets.append(line.strip())
+    secrets.append(re.sub('\s*#.*$','',line.strip()))
 
 import serial
 s = serial.Serial(port='/dev/ttyAMA0', baudrate=9600)
