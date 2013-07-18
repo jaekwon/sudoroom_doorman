@@ -90,6 +90,8 @@ class ActionHandler(tornado.web.RequestHandler):
             action = 'close'
         elif button == 'UNLOCK ELEVATOR':
             door = 'elevator'            
+        elif button == 'UNLOCK ELEVATOR LONG':
+            door = 'elevator_long'
         else:
             self.redirect('/?message=fail', permanent=False)
         if action == 'open' and not secretIn(secret):
@@ -104,13 +106,15 @@ class ActionHandler(tornado.web.RequestHandler):
                 self.redirect('/?message=success', permanent=False)
         elif door == 'outside':
             outerDoorOpen()
-            # unlock elevator for 90 seconds
-            unlock_elevator_for_seconds(90)
+            # unlock elevator for 40 seconds
+            unlock_elevator_for_seconds(40)
             self.redirect('/?message=success', permanent=False)
         elif door == 'elevator':
             self.redirect('/?message=success', permanent=False)
             unlock_elevator_for_seconds(20)
-
+        elif door == 'elevator_long':
+            self.redirect('/?message=success', permanent=False)
+            unlock_elevator_for_seconds(40)
         else:
             self.redirect('/?message=fail', permanent=False)
 
